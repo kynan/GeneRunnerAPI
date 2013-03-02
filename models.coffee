@@ -41,6 +41,6 @@ SampleSchema = new mongoose.Schema
   updated_at: Date
   workflow_ids: [String]
   zooniverse_id: String
-  points: [PointSchema]
+  points: []
 
 module.exports.sample = mongoose.model 'Sample', SampleSchema
