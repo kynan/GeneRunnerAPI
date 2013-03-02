@@ -26,6 +26,18 @@ require('zappajs') host, port, ->
       mongoose.connect process.env.MONGOHQ_URL || "mongodb://#{host}/#{manifest.name}"
       @use 'errorHandler'
 
+  @helper
+    add_sample: (sample) ->
+      Sample.findOneAndUpdate id: sample.id, sample, upsert: true, (err, sample) ->
+        console.log sample
+        request sample.location.standard, (err, res, points) ->
+          # We need to chop the first 5 and last 3 characters
+          points = JSON.parse points.substring(5, points.length-3)
+          console.log points
+          sample.points = points
+          sample.save (err) ->
+            console.log "Done! id=#{sample.id}"
+
   @get '/': ->
     @response.redirect '/home'
 
@@ -40,4 +52,6 @@ require('zappajs') host, port, ->
   @post '/import': ->
     request @body.url, (err, res, samples) =>
       samples = JSON.parse samples
+      for sample in samples
+        @add_sample sample
       @response.json samples
