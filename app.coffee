@@ -6,6 +6,10 @@ require('zappajs') host, port, ->
   fs = require 'fs'
   mongoose = require 'mongoose'
 
+  models = require('./models')
+  Sample = models.sample
+  Point = models.point
+
   @configure =>
     @use 'cookieParser',
       'bodyParser',
