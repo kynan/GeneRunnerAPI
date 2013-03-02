@@ -1,5 +1,6 @@
 port = process.env.PORT || 3000
 host = process.env.HOST || "0.0.0.0"
+request = require 'request'
 
 require('zappajs') host, port, ->
   manifest = require './package.json'
@@ -35,3 +36,8 @@ require('zappajs') host, port, ->
 
   @get '/source': ->
     @response.redirect manifest.source
+
+  @post '/import': ->
+    request @body.url, (err, res, samples) =>
+      samples = JSON.parse samples
+      @response.json samples
