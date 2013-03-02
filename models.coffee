@@ -1,5 +1,9 @@
 mongoose = require 'mongoose'
 
+PointSchema = new mongoose.Schema
+  x: Number
+  y: Number
+
 # Sample:
 #{
 #    "activated_at": "2013-02-19T04:14:32Z",
@@ -37,11 +41,6 @@ SampleSchema = new mongoose.Schema
   updated_at: Date
   workflow_ids: [String]
   zooniverse_id: String
-
-PointSchema = new mongoose.Schema
-  sampleId: mongoose.Schema.Types.ObjectId
-  x: Number
-  y: Number
+  points: [PointSchema]
 
 module.exports.sample = mongoose.model 'Sample', SampleSchema
-module.exports.point = mongoose.model 'Point', PointSchema
