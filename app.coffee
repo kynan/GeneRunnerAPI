@@ -55,3 +55,27 @@ require('zappajs') host, port, ->
       for sample in samples
         @add_sample sample
       @response.json samples
+
+  @get '/samples': ->
+    Sample.find {}, {id:true, _id:false}, (err, samples) =>
+      @response.write console.log "Error retrieving sample ids:", err if err?
+      @response.header "Access-Control-Allow-Origin", "*"
+      @response.json samples unless err?
+
+  @get '/sample/:id': ->
+    Sample.findOne {id: @params.id}, {points: false}, (err, sample) =>
+      @response.write console.log "Error retrieving sample id #{@params.id}", err if err?
+      @response.header "Access-Control-Allow-Origin", "*"
+      @response.json sample unless err?
+
+  @get '/points/:id/:start/:end': ->
+    Sample.findOne {id: @params.id}, 'points', (err, sample) =>
+      @response.write console.log "Error retrieving points for sample id #{@params.id}", err if err?
+      @response.header "Access-Control-Allow-Origin", "*"
+      @response.json sample.points.slice(@params.start, @params.end) unless err?
+
+  @get '/points/:id': ->
+    Sample.findOne {id: @params.id}, 'points', (err, sample) =>
+      @response.write console.log "Error retrieving points for sample id #{@params.id}", err if err?
+      @response.header "Access-Control-Allow-Origin", "*"
+      @response.json sample.points unless err?
