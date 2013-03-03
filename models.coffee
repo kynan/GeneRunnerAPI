@@ -1,8 +1,13 @@
 mongoose = require 'mongoose'
 
-PointSchema = new mongoose.Schema
-  x: Number
-  y: Number
+InteractionSchema = new mongoose.Schema
+  sampleId: mongoose.Schema.Types.ObjectId
+  c:
+    x: Number
+    y: Number
+  e:
+    x: Number
+    y: Number
 
 # Sample:
 #{
@@ -50,3 +55,4 @@ SampleSchema = new mongoose.Schema
     max: Number
 
 module.exports.sample = mongoose.model 'Sample', SampleSchema
+module.exports.interaction = mongoose.model 'Interaction', InteractionSchema
