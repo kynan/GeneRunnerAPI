@@ -33,6 +33,9 @@ require('zappajs') host, port, ->
         request sample.location.standard, (err, res, points) ->
           # We need to chop the first 5 and last 3 characters
           points = JSON.parse points.substring(5, points.length-3)
+          points = [[parseInt(p[0]), parseFloat(p[1])] for p in points]
+          points.sort (a, b) ->
+            a[0] - b[0]
           console.log points
           sample.points = points
           sample.save (err) ->
