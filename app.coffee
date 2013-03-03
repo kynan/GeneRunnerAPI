@@ -28,8 +28,7 @@ require('zappajs') host, port, ->
 
   @helper
     add_sample: (sample) ->
-      Sample.findOneAndUpdate id: sample.id, sample, upsert: true, (err, sample) ->
-        console.log sample
+      Sample.findByIdAndUpdate sample.id, sample, upsert: true, (err, sample) ->
         request sample.location.standard, (err, res, points) ->
           # We need to chop the first 5 and last 3 characters
           points = JSON.parse points.substring(5, points.length-3)
@@ -60,25 +59,25 @@ require('zappajs') host, port, ->
       @response.json samples
 
   @get '/samples': ->
-    Sample.find {}, {id:true, _id:false}, (err, samples) =>
+    Sample.find {}, {id:true}, (err, samples) =>
       @response.write console.log "Error retrieving sample ids:", err if err?
       @response.header "Access-Control-Allow-Origin", "*"
       @response.json samples unless err?
 
-  @get '/sample/:id': ->
-    Sample.findOne {id: @params.id}, {points: false}, (err, sample) =>
+  @get '/samples/:id': ->
+    Sample.findById @params.id, {points: false}, (err, sample) =>
       @response.write console.log "Error retrieving sample id #{@params.id}", err if err?
       @response.header "Access-Control-Allow-Origin", "*"
       @response.json sample unless err?
 
   @get '/points/:id/:start/:end': ->
-    Sample.findOne {id: @params.id}, 'points', (err, sample) =>
+    Sample.findById @params.id, 'points', (err, sample) =>
       @response.write console.log "Error retrieving points for sample id #{@params.id}", err if err?
       @response.header "Access-Control-Allow-Origin", "*"
       @response.json sample.points.slice(@params.start, @params.end) unless err?
 
   @get '/points/:id': ->
-    Sample.findOne {id: @params.id}, 'points', (err, sample) =>
+    Sample.findById @params.id, 'points', (err, sample) =>
       @response.write console.log "Error retrieving points for sample id #{@params.id}", err if err?
       @response.header "Access-Control-Allow-Origin", "*"
       @response.json sample.points unless err?

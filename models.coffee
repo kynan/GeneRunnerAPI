@@ -30,7 +30,6 @@ SampleSchema = new mongoose.Schema
   activated_at: Date
   classification_count: Number
   created_at: Date
-  id: String
   location:
       standard: String
   metadata:
