@@ -41,5 +41,12 @@ SampleSchema = new mongoose.Schema
   workflow_ids: [String]
   zooniverse_id: String
   points: []
+  num_points: Number
+  x:
+    min: Number
+    max: Number
+  y:
+    min: Number
+    max: Number
 
 module.exports.sample = mongoose.model 'Sample', SampleSchema
