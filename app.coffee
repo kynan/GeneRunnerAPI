@@ -32,13 +32,19 @@ require('zappajs') host, port, ->
         request sample.location.standard, (err, res, points) ->
           # We need to chop the first 5 and last 3 characters
           points = JSON.parse points.substring(5, points.length-3)
-          points = [[parseInt(p[0]), parseFloat(p[1])] for p in points]
+          points = points.map (p) -> [parseInt(p[0]), parseFloat(p[1])]
           points.sort (a, b) ->
             a[0] - b[0]
-          console.log points
+          sample.num_point = points.length
+          sample.x = {min: points[0][0], max: points[points.length-1][0]}
+          sample.y =
+            min: Math.min.apply(null, points.map (p) -> p[1])
+            max: Math.max.apply(null, points.map (p) -> p[1])
+          console.log sample
           sample.points = points
-          sample.save (err) ->
-            console.log "Done! id=#{sample.id}"
+          sample.save (err, sample) ->
+            console.log err if err?
+            console.log "Done! Imported #{points.length} points for sampleId #{sample.id}" unless err?
 
   @get '/': ->
     @response.redirect '/home'
