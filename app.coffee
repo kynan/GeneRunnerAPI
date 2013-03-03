@@ -62,7 +62,7 @@ require('zappajs') host, port, ->
   @get '/source': ->
     @response.redirect manifest.source
 
-  @post '/import/samples': ->
+  @post '/samples/import': ->
     request @body.url, (err, res, samples) =>
       samples = JSON.parse samples
       for sample in samples
@@ -71,7 +71,7 @@ require('zappajs') host, port, ->
           @response.json err if err?
           @response.json samples unless err?
 
-  @post '/import/points': ->
+  @post '/points/import': ->
     if @body.id
       Sample.findById @body.id, (err, sample) =>
         @response.json err if err?
