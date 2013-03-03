@@ -72,17 +72,21 @@ require('zappajs') host, port, ->
           @response.json samples unless err?
 
   @post '/import/points': ->
-    if @body.url
-      Sample.findById @body.id, (err, sample) ->
+    if @body.id
+      Sample.findById @body.id, (err, sample) =>
         @response.json err if err?
-        @add_sample sample unless err?
+        @response.json "No location found for sample id #{sample.id}" unless sample.location?.standard?
+        @add_sample sample
+        @response.json "Importing points for sample id #{sample.id}"
+    else if @body?.length > 0
+      Sample.create {}, (err, sample) =>
+        @add_points sample, @body
         @response.json "Importing points for sample id #{sample.id}"
     else
-      Sample.find @body.id, {points: false}, (err, samples) =>
+      Sample.find {}, {points: false}, (err, samples) =>
         @response.json err if err?
-        for sample in samples
-          @add_sample sample unless err?
-        @response.json "Importing points for sample ids #{samples.map (s) -> s.id}"
+        @add_sample sample for sample in samples when sample.location?.standard?
+        @response.json "Importing points for sample ids #{s.id for s in samples when s.location?.standard?}"
 
   @get '/samples': ->
     Sample.find {}, {id:true}, (err, samples) =>
