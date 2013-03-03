@@ -39,7 +39,8 @@ require('zappajs') host, port, ->
         sample.y =
           min: Math.min.apply(null, points.map (p) -> p[1])
           max: Math.max.apply(null, points.map (p) -> p[1])
-        sample.points = points
+        yrange = sample.y.max - sample.y.min
+        sample.points = points.map (p) -> [p[0], (p[1] - sample.y.min)/yrange]
         sample.save (err, newsample) ->
           console.log "Importing points for sample #{sample.id} failed:", err if err?
           console.log "Done! Imported #{points.length} points for sampleId #{newsample.id}" unless err?
