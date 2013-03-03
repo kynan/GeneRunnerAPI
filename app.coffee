@@ -94,6 +94,12 @@ require('zappajs') host, port, ->
       @response.header "Access-Control-Allow-Origin", "*"
       @response.json samples.map (s) -> s._id unless err?
 
+  @get '/samples/all': ->
+    Sample.find {}, {points: false}, (err, samples) =>
+      @response.write console.log "Error retrieving samples:", err if err?
+      @response.header "Access-Control-Allow-Origin", "*"
+      @response.json samples unless err?
+
   @get '/samples/:id': ->
     Sample.findById @params.id, {points: false}, (err, sample) =>
       @response.write console.log "Error retrieving sample id #{@params.id}", err if err?
