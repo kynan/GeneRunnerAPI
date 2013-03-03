@@ -57,12 +57,14 @@ require('zappajs') host, port, ->
   @get '/source': ->
     @response.redirect manifest.source
 
-  @post '/import': ->
+  @post '/import/samples': ->
     request @body.url, (err, res, samples) =>
       samples = JSON.parse samples
       for sample in samples
-        @add_sample sample
-      @response.json samples
+        Sample.findByIdAndUpdate sample.id, sample, upsert: true, (err, sample) =>
+          console.log "Added sample id #{sample.id}"
+          @response.json err if err?
+          @response.json samples unless err?
 
   @get '/samples': ->
     Sample.find {}, {id:true}, (err, samples) =>
