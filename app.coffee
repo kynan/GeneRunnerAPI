@@ -7,7 +7,9 @@ require('zappajs') host, port, ->
   fs = require 'fs'
   mongoose = require 'mongoose'
 
-  Sample = require('./models').sample
+  models = require('./models')
+  Sample = models.sample
+  Interaction = models.interaction
 
   @configure =>
     @use 'cookieParser',
@@ -123,3 +125,15 @@ require('zappajs') host, port, ->
         @response.json sample.points unless err?
       else
         @response.json []
+
+  @post '/interactions/:id': ->
+    Sample.findById @params.id, 'id', (err, sample) =>
+      @response.write console.log "Error retrieving sample id #{@params.id}", err if err?
+      return @response.json "Could not find sample #{@params.id}" if not sample
+      interactions = @body
+      console.log "Interactions received for sample #{sample.id}", interactions
+      for interaction in interactions
+        interaction.sampleId = @params.id
+        Interaction.create interaction, (err) =>
+          console.log "Error creating interaction #{interaction} for sample id #{@params.id}:", err if err?
+      @response.json "#{interactions.length} interactions received"
