@@ -110,10 +110,16 @@ require('zappajs') host, port, ->
     Sample.findById @params.id, 'points', (err, sample) =>
       @response.write console.log "Error retrieving points for sample id #{@params.id}", err if err?
       @response.header "Access-Control-Allow-Origin", "*"
-      @response.json sample.points.slice(@params.start, @params.end) unless err?
+      if sample
+        @response.json sample.points?[@params.start..@params.end] unless err?
+      else
+        @response.json []
 
   @get '/points/:id': ->
     Sample.findById @params.id, 'points', (err, sample) =>
       @response.write console.log "Error retrieving points for sample id #{@params.id}", err if err?
       @response.header "Access-Control-Allow-Origin", "*"
-      @response.json sample.points unless err?
+      if sample
+        @response.json sample.points unless err?
+      else
+        @response.json []
