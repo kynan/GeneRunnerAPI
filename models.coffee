@@ -32,17 +32,17 @@ InteractionSchema = new mongoose.Schema
 #}
 
 SampleSchema = new mongoose.Schema
-  activated_at: Date
+  activated_at: { type: Date, default: Date.now }
+  created_at: { type: Date, default: Date.now }
+  updated_at: { type: Date, default: Date.now }
   classification_count: Number
-  created_at: Date
   location:
-      standard: String
+    standard: String
   metadata:
-      origName: String
+    origName: String
   project_id: String
   random: Number
   state: String
-  updated_at: Date
   workflow_ids: [String]
   zooniverse_id: String
   points: []
