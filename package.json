@@ -3,7 +3,7 @@
   "version":                  "0.0.1",
   "description":              "Query Zooniverse's Gene Runner data",
   "homepage":                 "https://generunner.heroku.com",
-  "source":                   "https://github.com/CRUKorg/geneRunnerAPI",
+  "source":                   "https://github.com/kynan/GeneRunnerAPI",
   "author":                   "Florian Rathgeber <florian.rathgeber@gmail.com>",
   "keywords": [
     "node"
@@ -15,11 +15,11 @@
     }
   ],
   "bugs": {
-    "url":                    "https://github.com/CRUKorg/geneRunnerAPI/issues"
+    "url":                    "https://github.com/kynan/GeneRunnerAPI/issues"
   },
   "repository": {
     "type":                   "git",
-    "url":                    "git://github.com/CRUKorg/geneRunnerAPI.git"
+    "url":                    "git://github.com/kynan/GeneRunnerAPI.git"
   },
   "engines": {
     "node":                   ">= 0.8.x",
